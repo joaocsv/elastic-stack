@@ -37,11 +37,22 @@ services:
     container_name: metricbeat
     user: root
     volumes:
-      - ./beats/metric/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - ./beats/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
       - /var/run/docker.sock:/var/run/docker.sock
     restart: on-failure
     networks: 
         - observability
+
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:7.13.0
+    container_name: heartbeat
+    volumes:
+    - ./beats/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+    environment: 
+    - setup.kibana.host=kibana:5601
+    networks: 
+      - observability
+
 networks:
   observability:
     driver: bridge
