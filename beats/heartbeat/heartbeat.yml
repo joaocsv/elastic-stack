@@ -11,6 +11,7 @@ heartbeat.monitors:
     - elasticsearch
     - kibana
     - metricbeat
+    - apm
 
 output.elasticsearch:
   hosts: 'elasticsearch:9200'

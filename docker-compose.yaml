@@ -18,7 +18,7 @@ services:
       - ./elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-    networks: 
+    networks:
         - observability
    
   kibana:
@@ -50,9 +50,20 @@ services:
     - ./beats/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
     environment: 
     - setup.kibana.host=kibana:5601
-    networks: 
+    networks:
+      - observability
+  
+  apm:
+    image: docker.elastic.co/apm/apm-server:7.13.0
+    container_name: apm
+    volumes:
+      - ./apm/apm-server.yml:/usr/share/apm-server/apm-server.yml
+    ports:
+      - "8200:8200"
+    restart: on-failure
+    networks:
       - observability
 
 networks:
   observability:
-    driver: bridge
+    external: true
